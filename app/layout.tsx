@@ -16,7 +16,6 @@ export const metadata: Metadata = {
   title: "Intern Time Tracker - DTR System",
   description: "Track your internship daily time records (DTR), calculate hours, and export to PDF/Excel",
   keywords: ["DTR", "time tracking", "internship", "hours calculator"],
-  charset: "utf-8",
 };
 
 export const viewport: Viewport = {
