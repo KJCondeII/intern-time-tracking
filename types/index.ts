@@ -41,3 +41,14 @@ export interface ApiResponse<T> {
   error?: string;
   message?: string;
 }
+
+/**
+ * User Quota Interface - Stores user's monthly hours quota
+ */
+export interface UserQuota {
+  id?: string;
+  user_id?: string;
+  monthly_hours_quota: number;
+  created_at?: string;
+  updated_at?: string;
+}

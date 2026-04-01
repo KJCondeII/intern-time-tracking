@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { createClient } from "@/utils/supabase/client";
 
 export default function LoginPage() {
@@ -83,6 +84,14 @@ export default function LoginPage() {
         {/* Info Text */}
         <p className="mt-6 text-center text-sm text-gray-500">
           By signing in, you agree to track and manage your daily time records securely.
+        </p>
+
+        {/* Registration Link */}
+        <p className="mt-6 text-center text-gray-600">
+          New user?{" "}
+          <Link href="/register" className="text-indigo-600 hover:text-indigo-700 font-semibold">
+            Create an account
+          </Link>
         </p>
       </div>
     </div>

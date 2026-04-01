@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import TimeForm from "@/components/TimeForm";
 import Table from "@/components/Table";
 import { generatePDF, exportToCSV } from "@/utils/exportUtils";
@@ -8,7 +9,7 @@ import { TimeRecord, ApiResponse } from "@/types";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Home() {
-  const { user, loading: authLoading, logout } = useAuth();
+  const { user, loading: authLoading, logout, isNewUser } = useAuth();
   const [records, setRecords] = useState<TimeRecord[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
@@ -98,17 +99,45 @@ export default function Home() {
           
           {/* User Profile Section */}
           {!authLoading && user && (
-            <div className="flex items-center gap-4 bg-white p-4 rounded-lg shadow-md">
-              <div className="text-right">
-                <p className="text-sm text-gray-600">Welcome</p>
-                <p className="font-semibold text-gray-800">{user.email}</p>
+            <div className="flex flex-col items-end gap-4 bg-white p-4 rounded-lg shadow-md">
+              {/* Welcoming Message */}
+              <div className="mb-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 w-full">
+                {isNewUser ? (
+                  <div>
+                    <p className="text-sm font-semibold text-blue-700 mb-1">🎉 Welcome to DTR System!</p>
+                    <p className="text-xs text-blue-600">
+                      Great to have you on board! Start tracking your internship hours now.
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-sm font-semibold text-indigo-700">Welcome back!</p>
+                    <p className="text-xs text-indigo-600">
+                      Keep up the great work tracking your time.
+                    </p>
+                  </div>
+                )}
               </div>
-              <button
-                onClick={logout}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium text-sm"
-              >
-                Logout
-              </button>
+
+              {/* User Email and Logout */}
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <p className="text-sm text-gray-600">Account</p>
+                  <p className="font-semibold text-gray-800">{user.email}</p>
+                </div>
+                <Link
+                  href="/analytics"
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium text-sm"
+                >
+                  Analytics
+                </Link>
+                <button
+                  onClick={logout}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium text-sm"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           )}
         </div>
