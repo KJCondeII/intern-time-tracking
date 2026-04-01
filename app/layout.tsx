@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -17,7 +17,11 @@ export const metadata: Metadata = {
   description: "Track your internship daily time records (DTR), calculate hours, and export to PDF/Excel",
   keywords: ["DTR", "time tracking", "internship", "hours calculator"],
   charset: "utf-8",
-  viewport: "width=device-width, initial-scale=1.0",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1.0,
 };
 
 export default function RootLayout({
