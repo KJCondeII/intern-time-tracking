@@ -413,6 +413,8 @@ export default function ProfilePage() {
                     onChange={(e) => setCurrentPassword(e.target.value)}
                     placeholder="Enter current password"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-colors text-black placeholder-black bg-white"
+                  />
+                </div>
                 <div>
                   <label htmlFor="newPassword" className="block text-sm font-medium text-black mb-2">
                     New Password
@@ -457,6 +459,8 @@ export default function ProfilePage() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Confirm new password"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-colors text-black placeholder-black bg-white"
+                  />
+                </div>
                 <button
                   type="submit"
                   className="w-full px-4 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors"
