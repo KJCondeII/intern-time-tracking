@@ -15,8 +15,8 @@ export default function Table({ data, onDelete, isLoading }: TableProps) {
   if (data.length === 0) {
     return (
       <div className="w-full mt-6 bg-white p-8 rounded-lg shadow text-center">
-        <p className="text-gray-500 text-lg">No time records yet.</p>
-        <p className="text-gray-400 text-sm mt-2">
+        <p className="text-black text-lg">No time records yet.</p>
+        <p className="text-black text-sm mt-2">
           Add your first entry using the form above.
         </p>
       </div>
@@ -48,19 +48,19 @@ export default function Table({ data, onDelete, isLoading }: TableProps) {
                   index % 2 === 0 ? "bg-gray-50" : "bg-white"
                 } hover:bg-blue-50 transition`}
               >
-                <td className="px-4 py-3 font-medium text-gray-800">
+                <td className="px-4 py-3 font-medium text-black">
                   {new Date(record.date).toLocaleDateString()}
                 </td>
-                <td className="px-4 py-3 text-center text-gray-600">
+                <td className="px-4 py-3 text-center text-black">
                   {record.am_in}
                 </td>
-                <td className="px-4 py-3 text-center text-gray-600">
+                <td className="px-4 py-3 text-center text-black">
                   {record.am_out}
                 </td>
-                <td className="px-4 py-3 text-center text-gray-600">
+                <td className="px-4 py-3 text-center text-black">
                   {record.pm_in}
                 </td>
-                <td className="px-4 py-3 text-center text-gray-600">
+                <td className="px-4 py-3 text-center text-black">
                   {record.pm_out}
                 </td>
                 <td className="px-4 py-3 text-right font-semibold text-blue-600">
@@ -85,13 +85,13 @@ export default function Table({ data, onDelete, isLoading }: TableProps) {
 
       {/* Summary Footer */}
       <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-4 py-4 border-t text-right">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-black">
           <span className="font-semibold">Total Hours:</span>{" "}
           <span className="text-lg font-bold text-blue-600">
             {totalHours.toFixed(2)} h
           </span>
         </p>
-        <p className="text-xs text-gray-500 mt-1">
+        <p className="text-xs text-black mt-1">
           {data.length} record{data.length !== 1 ? "s" : ""}
         </p>
       </div>

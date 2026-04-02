@@ -124,3 +124,129 @@ export async function POST(
     );
   }
 }
+
+/**
+ * PUT /api/time-records - Update a time record for authenticated user
+ */
+export async function PUT(
+  req: NextRequest
+): Promise<NextResponse<ApiResponse<TimeRecord>>> {
+  try {
+    const cookieStore = await cookies();
+    const supabase = createClient(cookieStore);
+
+    // Get authenticated user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const body = await req.json();
+    const { id, date, am_in, am_out, pm_in, pm_out, total_hours } = body;
+
+    // Validate required fields
+    if (!id || !date || !am_in || !am_out || !pm_in || !pm_out || !total_hours) {
+      return NextResponse.json(
+        { success: false, error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Update record in Supabase
+    const { data, error } = await supabase
+      .from("time_records")
+      .update({
+        date,
+        am_in,
+        am_out,
+        pm_in,
+        pm_out,
+        total_hours,
+      })
+      .eq("id", id)
+      .eq("user_id", user.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return NextResponse.json(
+      {
+        success: true,
+        data,
+        message: "Record updated successfully",
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("PUT error:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to update record" },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * DELETE /api/time-records - Delete a time record for authenticated user
+ */
+export async function DELETE(
+  req: NextRequest
+): Promise<NextResponse<ApiResponse<null>>> {
+  try {
+    const cookieStore = await cookies();
+    const supabase = createClient(cookieStore);
+
+    // Get authenticated user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: "Record ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Delete record from Supabase
+    const { error } = await supabase
+      .from("time_records")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", user.id);
+
+    if (error) throw error;
+
+    return NextResponse.json(
+      {
+        success: true,
+        data: null,
+        message: "Record deleted successfully",
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("DELETE error:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to delete record" },
+      { status: 500 }
+    );
+  }
+}

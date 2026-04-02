@@ -109,10 +109,10 @@ export default function AnalyticsPage() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
+          <h1 className="text-4xl font-bold text-black mb-2">
             Analytics & Time Quota
           </h1>
-          <p className="text-gray-600">
+          <p className="text-black">
             Track your progress towards your monthly time quota
           </p>
         </div>
@@ -120,13 +120,13 @@ export default function AnalyticsPage() {
         {authLoading ? (
           <div className="text-center py-12 bg-white rounded-lg shadow">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            <p className="text-gray-600 mt-4">Loading...</p>
+            <p className="text-black mt-4">Loading...</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left: Quota Input */}
             <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Set Monthly Quota</h2>
+              <h2 className="text-xl font-bold text-black mb-4">Set Monthly Quota</h2>
               
               {message && (
                 <div
@@ -148,7 +148,7 @@ export default function AnalyticsPage() {
 
               <form onSubmit={handleSaveQuota} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-black mb-2">
                     Monthly Hours Quota
                   </label>
                   <input
@@ -160,7 +160,7 @@ export default function AnalyticsPage() {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
                     disabled={isSaving}
                   />
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-black mt-1">
                     Enter your target monthly work hours
                   </p>
                 </div>
@@ -177,21 +177,21 @@ export default function AnalyticsPage() {
               {/* Current Stats */}
               <div className="mt-6 space-y-3 border-t pt-6">
                 <div>
-                  <p className="text-sm text-gray-600">Monthly Quota</p>
+                  <p className="text-sm text-black">Monthly Quota</p>
                   <p className="text-2xl font-bold text-indigo-600">{quota} hrs</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Hours Worked</p>
+                  <p className="text-sm text-black">Hours Worked</p>
                   <p className="text-2xl font-bold text-blue-600">{totalHours.toFixed(2)} hrs</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Hours Remaining</p>
+                  <p className="text-sm text-black">Hours Remaining</p>
                   <p className={`text-2xl font-bold ${remainingHours <= 0 ? "text-red-600" : "text-green-600"}`}>
                     {remainingHours.toFixed(2)} hrs
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Progress</p>
+                  <p className="text-sm text-black">Progress</p>
                   <p className="text-2xl font-bold text-yellow-600">{workPercentage}%</p>
                 </div>
               </div>
@@ -199,7 +199,7 @@ export default function AnalyticsPage() {
 
             {/* Right: Pie Chart */}
             <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Time Quota Progress</h2>
+              <h2 className="text-xl font-bold text-black mb-4">Time Quota Progress</h2>
               
               {quota > 0 ? (
                 <div className="flex flex-col items-center justify-center h-96">
@@ -210,7 +210,7 @@ export default function AnalyticsPage() {
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        label={({ name, value, percent }) => `${name}: ${value.toFixed(1)}h (${(percent * 100).toFixed(0)}%)`}
+                        label={({ name, value, percent }) => `${name}: ${value.toFixed(1)}h (${((percent ?? 0) * 100).toFixed(0)}%)`}
                         outerRadius={100}
                         fill="#8884d8"
                         dataKey="value"
@@ -220,7 +220,12 @@ export default function AnalyticsPage() {
                         ))}
                       </Pie>
                       <Tooltip
-                        formatter={(value: number) => `${value.toFixed(2)} hours`}
+                        formatter={(value: unknown) => {
+                          if (typeof value === 'number') {
+                            return `${value.toFixed(2)} hours`;
+                          }
+                          return '0 hours';
+                        }}
                       />
                       <Legend />
                     </PieChart>
@@ -252,8 +257,8 @@ export default function AnalyticsPage() {
               ) : (
                 <div className="h-96 flex items-center justify-center">
                   <div className="text-center">
-                    <p className="text-gray-600 mb-4">No quota set yet</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-black mb-4">No quota set yet</p>
+                    <p className="text-sm text-black">
                       Set your monthly quota on the left to see your progress chart
                     </p>
                   </div>
@@ -266,28 +271,28 @@ export default function AnalyticsPage() {
         {/* Records Summary */}
         {!authLoading && (
           <div className="mt-8 bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Recent Time Records</h2>
+            <h2 className="text-xl font-bold text-black mb-4">Recent Time Records</h2>
             {records.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead className="bg-gray-50 border-b">
                     <tr>
-                      <th className="px-4 py-2 text-left text-gray-700">Date</th>
-                      <th className="px-4 py-2 text-left text-gray-700">AM In</th>
-                      <th className="px-4 py-2 text-left text-gray-700">AM Out</th>
-                      <th className="px-4 py-2 text-left text-gray-700">PM In</th>
-                      <th className="px-4 py-2 text-left text-gray-700">PM Out</th>
-                      <th className="px-4 py-2 text-left text-gray-700">Total Hours</th>
+                      <th className="px-4 py-2 text-left text-black">Date</th>
+                      <th className="px-4 py-2 text-left text-black">AM In</th>
+                      <th className="px-4 py-2 text-left text-black">AM Out</th>
+                      <th className="px-4 py-2 text-left text-black">PM In</th>
+                      <th className="px-4 py-2 text-left text-black">PM Out</th>
+                      <th className="px-4 py-2 text-left text-black">Total Hours</th>
                     </tr>
                   </thead>
                   <tbody>
                     {records.slice(0, 5).map((record) => (
                       <tr key={record.id} className="border-b hover:bg-gray-50">
-                        <td className="px-4 py-2 text-gray-800">{record.date}</td>
-                        <td className="px-4 py-2 text-gray-600">{record.am_in}</td>
-                        <td className="px-4 py-2 text-gray-600">{record.am_out}</td>
-                        <td className="px-4 py-2 text-gray-600">{record.pm_in}</td>
-                        <td className="px-4 py-2 text-gray-600">{record.pm_out}</td>
+                        <td className="px-4 py-2 text-black">{record.date}</td>
+                        <td className="px-4 py-2 text-black">{record.am_in}</td>
+                        <td className="px-4 py-2 text-black">{record.am_out}</td>
+                        <td className="px-4 py-2 text-black">{record.pm_in}</td>
+                        <td className="px-4 py-2 text-black">{record.pm_out}</td>
                         <td className="px-4 py-2 font-semibold text-blue-600">
                           {Number(record.total_hours).toFixed(2)} hrs
                         </td>
@@ -297,7 +302,7 @@ export default function AnalyticsPage() {
                 </table>
               </div>
             ) : (
-              <p className="text-gray-600 text-center py-8">No time records yet. Start tracking your hours!</p>
+              <p className="text-black text-center py-8">No time records yet. Start tracking your hours!</p>
             )}
           </div>
         )}

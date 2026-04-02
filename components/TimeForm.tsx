@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import TimePickerInput from "./TimePickerInput";
 import { TimeFormState, ValidationResult } from "@/types";
 import { validateTimeRecord, calculateDailyHours } from "@/utils/timeUtils";
 
@@ -100,26 +101,22 @@ export default function TimeForm({ onSubmit, isLoading = false }: TimeFormProps)
     }
   };
 
-  const renderInput = (
+  const renderTimeInput = (
     label: string,
     field: keyof TimeFormState,
-    type: "date" | "time"
+    defaultPeriod: "AM" | "PM"
   ) => (
-    <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium text-gray-700">{label}</label>
-      <input
-        type={type}
+    <div className="flex flex-col gap-1.5">
+      <label className="text-xs font-bold text-black uppercase tracking-wider">{label}</label>
+      <TimePickerInput
         value={form[field]}
-        onChange={(e) => handleInputChange(field, e.target.value)}
-        className={`px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-          errors[field]
-            ? "border-red-500 focus:ring-red-500"
-            : "border-gray-300 focus:ring-blue-500"
-        }`}
+        onChange={(value) => handleInputChange(field, value)}
         disabled={isLoading}
+        error={!!errors[field]}
+        period={defaultPeriod}
       />
       {errors[field] && (
-        <span className="text-xs text-red-600">{errors[field]}</span>
+        <span className="text-xs font-semibold text-red-600">{errors[field]}</span>
       )}
     </div>
   );
@@ -127,37 +124,85 @@ export default function TimeForm({ onSubmit, isLoading = false }: TimeFormProps)
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white p-6 rounded-2xl shadow-md space-y-4"
+      className="bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-8 rounded-xl shadow-lg border-2 border-blue-100 space-y-5"
     >
-      <h2 className="text-xl font-bold text-gray-800">Add Time Record</h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {renderInput("Date", "date", "date")}
-        {renderInput("AM - In", "am_in", "time")}
-        {renderInput("AM - Out", "am_out", "time")}
-        {renderInput("PM - In", "pm_in", "time")}
-        {renderInput("PM - Out", "pm_out", "time")}
+      <div className="text-center mb-4">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Add Time Record</h2>
+        <p className="text-sm text-black mt-1">Track your daily work hours</p>
       </div>
 
+      {/* Date Input */}
+      <div className="flex flex-col gap-2">
+        <label className="text-sm font-semibold text-black flex items-center gap-2">
+          <span className="text-lg">📅</span> Date
+        </label>
+        <input
+          type="date"
+          value={form.date}
+          onChange={(e) => handleInputChange("date", e.target.value)}
+          className={`px-4 py-3 text-base border-2 rounded-lg focus:outline-none focus:ring-2 transition font-medium ${
+            errors.date
+              ? "border-red-500 focus:ring-red-500 bg-red-50 text-red-900"
+              : "border-gray-300 focus:ring-blue-500 focus:border-blue-500 bg-white text-black"
+          }`}
+          disabled={isLoading}
+        />
+        {errors.date && (
+          <span className="text-xs font-medium text-red-600">{errors.date}</span>
+        )}
+      </div>
+
+      {/* Morning Session */}
+      <div className="bg-gradient-to-br from-orange-50 to-white border-2 border-orange-200 rounded-xl p-5">
+        <h3 className="text-base font-bold text-orange-700 mb-4 flex items-center gap-2">
+          <span className="text-xl">🌅</span> Morning Session
+        </h3>
+        <div className="grid grid-cols-2 gap-4">
+          {renderTimeInput("In Time", "am_in", "AM")}
+          {renderTimeInput("Out Time", "am_out", "AM")}
+        </div>
+      </div>
+
+      {/* Afternoon Session */}
+      <div className="bg-gradient-to-br from-indigo-50 to-white border-2 border-indigo-200 rounded-xl p-5">
+        <h3 className="text-base font-bold text-indigo-700 mb-4 flex items-center gap-2">
+          <span className="text-xl">🌤️</span> Afternoon Session
+        </h3>
+        <div className="grid grid-cols-2 gap-4">
+          {renderTimeInput("In Time", "pm_in", "PM")}
+          {renderTimeInput("Out Time", "pm_out", "PM")}
+        </div>
+      </div>
+
+      {/* Info Box */}
+      <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+        <p className="text-sm text-blue-800 font-medium flex items-center gap-2">
+          <span>💡</span>
+          <span>Hour (1-12) → Minute (0-59) → Toggle AM/PM. Morning defaults to AM, Afternoon to PM.</span>
+        </p>
+      </div>
+
+      {/* Messages */}
       {message && (
         <div
-          className={`p-3 rounded-lg text-sm ${
+          className={`p-4 rounded-lg font-semibold text-sm transition border-2 ${
             message.type === "success"
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800"
+              ? "bg-green-100 border-green-500 text-green-800"
+              : "bg-red-100 border-red-500 text-red-800"
           }`}
         >
           {message.text}
         </div>
       )}
 
+      {/* Submit Button */}
       <button
         type="submit"
         disabled={isLoading}
-        className={`w-full py-2 rounded-lg font-medium transition ${
+        className={`w-full py-3 rounded-xl font-bold text-lg transition-all transform ${
           isLoading
-            ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-            : "bg-blue-600 text-white hover:bg-blue-700 active:scale-95"
+            ? "bg-gray-400 text-black cursor-not-allowed"
+            : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 active:scale-95 shadow-xl hover:shadow-2xl"
         }`}
       >
         {isLoading ? "Saving..." : "Save Entry"}

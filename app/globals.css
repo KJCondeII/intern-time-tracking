@@ -24,3 +24,14 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Recharts styling for better text visibility */
+.recharts-pie-label {
+  fill: #000000 !important;
+  font-weight: 600;
+}
+
+.recharts-legend-label {
+  color: #000000 !important;
+  fill: #000000 !important;
+}

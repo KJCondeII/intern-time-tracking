@@ -37,8 +37,17 @@ export function minutesToTime(minutes: number): string {
 }
 
 /**
- * Calculates hours worked between two time strings
- * Handles cases where times might cross midnight
+ * Checks if timeB is after timeA (same day, handles noon correctly)
+ */
+export function isTimeAfter(timeB: string, timeA: string): boolean {
+  return timeToMinutes(timeB) > timeToMinutes(timeA);
+}
+
+/**
+ * Calculates hours worked between two time strings (same day)
+ * Properly handles times including noon (12:00)
+ * Using 24-hour format internally: 08:00=8AM, 12:00=noon, 13:00=1PM, 17:00=5PM
+ * But displayed to user as: 8:00 AM, 12:00 PM, 1:00 PM, 5:00 PM
  */
 export function calculateHours(
   startTime: string,
@@ -49,19 +58,28 @@ export function calculateHours(
   }
 
   const startMinutes = timeToMinutes(startTime);
-  let endMinutes = timeToMinutes(endTime);
+  const endMinutes = timeToMinutes(endTime);
 
-  // If end time is less than start time, assume it's next day
-  if (endMinutes < startMinutes) {
-    endMinutes += 24 * 60;
+  // For same-day calculation (normal work hours)
+  // This handles 08:00 to 12:00 (4 hours) or 13:00 to 17:00 (4 hours)
+  if (endMinutes > startMinutes) {
+    const diffMinutes = endMinutes - startMinutes;
+    return diffMinutes / 60;
   }
 
-  const diffMinutes = endMinutes - startMinutes;
-  return diffMinutes / 60;
+  // If end time is less than start time, assume it's next day (rare edge case)
+  if (endMinutes < startMinutes) {
+    const diffMinutes = (24 * 60 - startMinutes) + endMinutes;
+    return diffMinutes / 60;
+  }
+
+  // Times are equal
+  return 0;
 }
 
 /**
  * Validates complete time record form
+ * Handles 12:00 as noon correctly
  */
 export function validateTimeRecord(
   date: string,
@@ -90,7 +108,7 @@ export function validateTimeRecord(
     errors.am_out = "AM Out time is required";
   } else if (!isValidTime(amOut)) {
     errors.am_out = "Invalid time format (use HH:MM)";
-  } else if (amIn && timeToMinutes(amOut) <= timeToMinutes(amIn)) {
+  } else if (amIn && !isTimeAfter(amOut, amIn)) {
     errors.am_out = "AM Out time must be after AM In time";
   }
 
@@ -99,7 +117,7 @@ export function validateTimeRecord(
     errors.pm_in = "PM In time is required";
   } else if (!isValidTime(pmIn)) {
     errors.pm_in = "Invalid time format (use HH:MM)";
-  } else if (amOut && timeToMinutes(pmIn) < timeToMinutes(amOut)) {
+  } else if (amOut && !isTimeAfter(pmIn, amOut)) {
     errors.pm_in = "PM In time should be after AM Out time";
   }
 
@@ -107,7 +125,7 @@ export function validateTimeRecord(
     errors.pm_out = "PM Out time is required";
   } else if (!isValidTime(pmOut)) {
     errors.pm_out = "Invalid time format (use HH:MM)";
-  } else if (pmIn && timeToMinutes(pmOut) <= timeToMinutes(pmIn)) {
+  } else if (pmIn && !isTimeAfter(pmOut, pmIn)) {
     errors.pm_out = "PM Out time must be after PM In time";
   }
 

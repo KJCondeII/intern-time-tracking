@@ -107,8 +107,8 @@ export default function RegisterPage() {
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">DTR System</h1>
-          <p className="text-gray-600">Create your account</p>
+          <h1 className="text-3xl font-bold text-black mb-2">DTR System</h1>
+          <p className="text-black">Create your account</p>
         </div>
 
         {/* Success Message */}
@@ -144,7 +144,7 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-black mb-2">
               Password
             </label>
             <input
@@ -152,13 +152,13 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="At least 6 characters"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-black placeholder-black bg-white"
               disabled={loading}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-black mb-2">
               Confirm Password
             </label>
             <input
@@ -166,7 +166,7 @@ export default function RegisterPage() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Confirm your password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-black placeholder-black bg-white"
               disabled={loading}
             />
           </div>
@@ -183,7 +183,7 @@ export default function RegisterPage() {
         {/* Divider */}
         <div className="my-6 flex items-center justify-center">
           <div className="border-t border-gray-300 flex-grow"></div>
-          <span className="px-3 text-gray-500 text-sm">or</span>
+          <span className="px-3 text-black text-sm">or</span>
           <div className="border-t border-gray-300 flex-grow"></div>
         </div>
 
@@ -191,7 +191,7 @@ export default function RegisterPage() {
         <button
           onClick={handleGoogleSignUp}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:border-gray-400 text-gray-700 font-semibold py-2 rounded-lg transition disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-2 border border-gray-300 hover:border-gray-400 text-black font-semibold py-2 rounded-lg transition disabled:opacity-50"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
@@ -215,7 +215,7 @@ export default function RegisterPage() {
         </button>
 
         {/* Login Link */}
-        <p className="text-center mt-6 text-gray-600">
+        <p className="text-center mt-6 text-black">
           Already have an account?{" "}
           <Link href="/login" className="text-indigo-600 hover:text-indigo-700 font-semibold">
             Sign in
